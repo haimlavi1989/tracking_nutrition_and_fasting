@@ -1,0 +1,63 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.btn-green:hover {
+  color: #fff;
+  background-color: rgba(109, 190, 144, 0.8);
+  border-color: rgba(109, 190, 144, 0.8);
+}
+
+.btn-green {
+  color: #fff;
+  background-color: rgb(109, 190, 144);
+  border-color: rgb(109, 190, 144);
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: white;
+  border-color: rgb(109, 190, 144);
+  box-shadow: 0 0 0 0.1rem rgb(109, 190, 144);
+}
+
+.btn:focus {
+  box-shadow: none;
+}
+
+.hide {
+  display: none;
+}
+
+.grey-backgound {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.app-green-backgound {
+  background-color: rgb(109, 190, 144);
+}
+
+.app-yellow-backgound {
+  background-color: rgb(253, 242, 182);
+}
+
+.app-red-backgound {
+  background-color: rgb(172, 29, 34);
+}
+
+.box-shadow {
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
+
+:root {
+  --section-rotate: 9vw;
+}
+
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}

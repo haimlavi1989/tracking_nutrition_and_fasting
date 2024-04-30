@@ -1,0 +1,30 @@
+
+<div class="addNewItem container mt-3 mb-3">
+  <div class="">
+    <label class="m-2" for="newdietdatetimepicker">מועד תחילת חלון אכילה:</label>
+    <input type="datetime-local" id="newdietdatetimepicker" (change)="handleDateSelection($event)" [value]="selectedDate | date: 'yyyy-MM-ddTHH:mm'">
+    <label class="m-2" for="weight">משקל נוכחי:(ק״ג)</label>
+    <input type="number" id="weight" placeholder="משקל התחלתי בק״ג" (change)="handleWeightSelection($event)" [value]="selectedWeight" required>
+    <button type="button" class="btn btn-danger btn-sm m-2"
+      (click)="createNewDiet()">
+      הוסף מועד
+      <fa-icon [icon]="faPlus"></fa-icon>
+    </button>
+  </div>
+</div>
+<h2>מועדים קרובים:</h2>
+<div class="diets container mt-1">
+      <div class="card-group row" *ngIf="diets.length !== 0;">
+        <app-diet class="card" style="" *ngFor="let diet of diets" [diet]="diet">
+        </app-diet>
+      </div>
+      <div  class="card-group row" *ngIf="diets.length === 0;">
+          אין תוצאות
+      </div>
+</div>
+<div class="container text-center">
+      <div class="row">
+        <app-loading-spinner [visible]="isLoadingDietsList"></app-loading-spinner>
+      </div>
+</div>
+

@@ -1,0 +1,70 @@
+<app-confirmation-dialog *ngIf="warnBeforeDelete" [message]="confirmationDialogMessage"
+                         (userSelectionEmitter)="handleDeleteSelection($event)"></app-confirmation-dialog>
+<div class="card-body">
+  <div class="">
+      <span class="m-1" (click)="deleteDietRecord()"><fa-icon [icon]="faTrash"></fa-icon></span>
+      <span class="m-1" (click)="startEditSpecificDiet()"><fa-icon [icon]="faPencil"></fa-icon></span>
+      <span class="m-1" (click)="setAlert()"><fa-icon [icon]="faBell"></fa-icon></span>
+      <span class="m-1" *ngIf="isEditDiet" (click)="handleUpdatingSpecificDiet()"><fa-icon [icon]="faSave"></fa-icon></span>
+  </div>
+  <div class="background">
+      <h5 class="card-title text-center">חלון צום/אכילה</h5>
+      <div class="timing text-center">
+          <div *ngIf="isEditDiet">
+              <div class="text-center p-1">
+                  <span class="text-bg-danger">{{'התחלה'}}</span><br><br>
+                  <input type="datetime-local" id="datetimepicker" (change)="handleDateSelected($event)" [value]="dietOBJCopy.startTime | date: 'yyyy-MM-ddTHH:mm'">
+              </div>
+              <div class="text-center p-1">
+                  <span class="text-bg-success">{{'סיום'}}</span>
+                  <br><b>{{ dietOBJCopy.endTime | date:'hh:mm a' }}</b>
+                  <br>{{ dietOBJCopy.endTime | date:'MM/dd/yyyy'  }}
+              </div>
+          </div>
+          <div *ngIf="!isEditDiet">
+              <div class="text-center p-1">
+                  <span class="text-bg-danger">{{'התחלה'}}</span>
+                  <br><b>{{ diet.startTime | date:'hh:mm a' }}</b>
+                  <br>{{ diet.startTime | date:'MM/dd/yyyy'  }}
+              </div>
+              <div class="text-center p-1">
+                  <span class="text-bg-success">{{'סיום'}}</span>
+                  <br><b>{{ diet.endTime | date:'hh:mm a' }}</b>
+                  <br>{{ diet.endTime | date:'MM/dd/yyyy'  }}
+              </div>
+          </div>
+      </div>
+  </div>
+  <span class="mt-3" (click)="startEditFoodList()"><fa-icon [icon]="faPencil"></fa-icon></span>
+  <span class="m-3" *ngIf="isEditFoodList" (click)="handleUpdatingFoodList()"><fa-icon [icon]="faSave"></fa-icon></span>
+  <h5 class="card-title text-center"> רשימת מזונות שצרכתי</h5>
+
+  <div class="group-container">
+      <div class="group" *ngFor="let group of groups; let i = index">
+          <div *ngFor="let product of group; let j = index">
+            <input type="text" class="foodItem text-center" type="text" [disabled]="!isEditFoodList" [(ngModel)]="groups[i][j]"/>
+            <span *ngIf="isEditFoodList" class="m-1"><fa-icon [icon]="faTrash" (click)="deleteProduct(i, j)"></fa-icon></span>
+          </div>
+      </div>
+  </div>
+
+  <div class="group-container">
+     <div *ngIf="isEditFoodList">
+        <input  type="text" [(ngModel)]="newFoodItem" placeholder="מזון חדש">
+        <button type="button" class="btn btn-danger btn-sm m-2" (click)="addToGroups()"> הוסף <fa-icon [icon]="faPlus"></fa-icon> </button>
+      </div>
+  </div>
+  <h5 class="card-title text-center"> משקל בתחילת החלון </h5>
+  <div class="container">
+     <div class="text-center">
+        {{ diet.weight }} {{ ' ק״ג' }}
+      </div>
+  </div>
+
+  <div class="container text-center">
+        <div class="row">
+          <app-loading-spinner [visible]="isLoadingDiet"></app-loading-spinner>
+        </div>
+  </div>
+  <app-reminder *ngIf="isShowingReminderComponent" [reminderId]="diet.reminderId" (closeComponent)="handleReminderComponent()"></app-reminder>
+</div>

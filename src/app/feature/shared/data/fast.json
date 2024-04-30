@@ -1,0 +1,20 @@
+[
+    {
+      "id": 1,
+      "startTime": 1713279195,
+      "endTime": 1713282795,
+      "foodList": ["food1", "food2", "food3", "food4", "food5", "food6"]
+    },
+    {
+      "id": 2,
+      "startTime": 1713279195,
+      "endTime": 1713282795,
+      "foodList": ["food4", "food5", "food6"]
+    },
+      {
+      "id": 3,
+      "startTime": 1713279195,
+      "endTime": 1713282795,
+      "foodList": ["food7", "food8", "food9", "food4", "food5", "food6", "food4", "food5", "food6"]
+    }
+]

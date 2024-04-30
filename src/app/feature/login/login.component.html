@@ -1,0 +1,59 @@
+<div class="login">
+
+
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <app-alert [message]="error" *ngIf="error" (close)="onHandleError()"></app-alert>
+      <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+      <div class="login-box col-md-6 col-lg-4 animate__animated animate__bounceInDown" *ngIf="!isLoading">
+        <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit()" class="login-form">
+            <h3 class="text-center form-title">התחברות</h3>
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <input type="email" class="form-control" name="email" placeholder="אימייל" formControlName="email">
+                </div>
+
+                <div class="feedback col-md-12">
+                    <small *ngIf="email.errors?.['required'] && (email.dirty || email.touched)">
+                      {{ errorEmptyFields }}
+                    </small>
+                    <small *ngIf="email.dirty && email.touched && email.invalid">
+                        invalid email!
+                    </small>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <input type="password" class="form-control" aria-describedby="passwordHelpInline"
+                    placeholder="סיסמא" name="password" formControlName="password">
+                </div>
+                <div class="feedback col-md-12">
+                    <small *ngIf="password.errors?.['required'] && (password.dirty || password.touched)">
+                        {{ errorEmptyFields }}
+                    </small>
+                    <small *ngIf="password.invalid && password.dirty && password.touched">
+                        min length is 4
+                    </small>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <button type="submit" class="submit btn btn-primary col-md-12" [disabled]="!loginFormGroup.valid">
+                    כניסה
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <button type="button" routerLink="/register" routerLinkActive="active"
+                  class="btn btn-green col-md-12">הרשמה</button>
+                </div>
+              </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

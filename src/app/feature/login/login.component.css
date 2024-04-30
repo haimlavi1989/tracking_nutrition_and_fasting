@@ -1,0 +1,46 @@
+
+
+input[type='password'], input[type='email'] {
+    background-size: 15px 15px;
+    background-position: 97%;
+    background-repeat: no-repeat;
+}
+
+
+input[type='password'] {
+   background-image: url("/assets/images/padlock.png");
+   background-position: left;
+}
+
+input[type='email'] {
+   background-image: url("/assets/images/at.png");
+   background-position: left;
+}
+
+.submit {
+   background-color: #414042;
+   border: 1px solid #414042;
+   color: white;
+   text-align: center;
+}
+
+.feedback {
+   color: red;
+}
+
+ .login .container .login-box {
+   margin-top: 15%;
+   max-width: 596px;
+   background-color: #EAEAEA;
+   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+ }
+
+ .login-form {
+    padding: 10%;
+ }
+
+ .login .form-title {
+    color: #414042;
+    margin-bottom: 5%;
+ }
+

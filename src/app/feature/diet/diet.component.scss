@@ -1,0 +1,37 @@
+.background {
+  position: relative;
+}
+.background::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.altman.co.il/tm-content/uploads/2022/04/%D7%93%D7%99%D7%90%D7%98%D7%AA-16.8-1-684x444.jpg');
+    opacity: 0.3;
+    background-size: cover;
+    background-position: center;
+}
+.timing {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+}
+.group-container {
+  display: flex;
+  justify-content: right;
+}
+
+.group {
+  text-align: center;
+  width: 25%;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.foodItem {
+  text-align: center !important;
+  border: none;
+  background-color: transparent;
+}

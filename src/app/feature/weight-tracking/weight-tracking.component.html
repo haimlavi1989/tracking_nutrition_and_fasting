@@ -1,0 +1,37 @@
+<div class="container mt-3 mb-3">
+  <div id="chart">
+    <div class="text-center">
+      <select id="nutritionReminder" name="nutritionReminder" (change)="getGraphData()" [(ngModel)]="selectedGraphTime" required>
+          <option *ngFor="let option of graphTimeDurations" [value]="option.value"
+                  [selected]="option.value === selectedGraphTime"
+                  >{{ option.key }}
+          </option>
+      </select>
+    </div>
+
+    <div *ngIf="true" class="graph-spinner fas fa-spinner fa-spin fa-2x"></div>
+    <apx-chart
+      #chart
+      *ngIf="chartOptions && chartOptions.series[0].data"
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [stroke]="chartOptions.stroke"
+      [dataLabels]="chartOptions.dataLabels"
+      [yaxis]="chartOptions.yaxis"
+      [labels]="chartOptions.labels"
+      [legend]="chartOptions.legend"
+      [title]="chartOptions.title"
+      [subtitle]="chartOptions.subtitle"
+    ></apx-chart>
+    <div *ngIf="chartOptions?.series[0].data && chartOptions?.series[0].data.length === 0">
+      אין מידע לתצוגה
+    </div>
+  </div>
+</div>
+<div class="container text-center">
+      <div class="row">
+        <app-loading-spinner [visible]="isLoadingWeightEntriesList"></app-loading-spinner>
+      </div>
+</div>
+

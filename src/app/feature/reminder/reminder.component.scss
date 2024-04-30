@@ -1,0 +1,56 @@
+.modal {
+    display: block;
+    top: 20%;
+    height: auto;
+    .modal-content {
+      padding: 1rem;
+    }
+    .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        position: relative;
+        top: -15px;
+        left: 5px;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .overview {
+        .overview-left {
+            color: #000;
+            font-family: "Roboto";
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 20px;
+            padding: 2px 0;
+            display: table-cell;
+        }
+        .overview-right {
+            color: rgba(0,0,0,.66);
+            font-family: "Roboto";
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 20px;
+            margin-bottom: 4px;
+            padding-left: 24px;
+            word-break: break-word;
+            min-width: 64px;
+            display: table-cell;
+        }
+    }
+    .tag {
+        color: #000;
+        font-weight: 400;
+        line-height: 20px;
+        background-color: rgba(0,0,0,.08);
+        padding: 0 10px;
+        border-radius: 10px;
+        box-shadow: none;
+    }
+
+}
+

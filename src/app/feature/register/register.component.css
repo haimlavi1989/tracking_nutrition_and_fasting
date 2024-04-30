@@ -1,0 +1,54 @@
+.register input[type='password'], .register input[type='email'],
+.register input[type='text'], .register input[type='number'] {
+    background-size: 15px 15px;
+    background-position: 97%;
+    background-repeat: no-repeat;
+}
+
+
+.register input[type='password'] {
+   background-image: url("/assets/images/padlock.png");
+   background-position: left;
+}
+
+.register input[type='email'] {
+   background-image: url("/assets/images/at.png");
+   background-position: left;
+}
+
+.register input[type='text'] {
+    background-image: url("/assets/images/user_card_icon.png");
+    background-position: left;
+ }
+
+ .register input[type='number'] {
+    background-image: url("/assets/images/age_icon.png");
+    background-position: left;
+ }
+
+ .register .submit {
+   background-color: #414042;
+   border: 1px solid #414042;
+   color: white;
+   text-align: center;
+}
+
+.register .feedback {
+   color: red;
+}
+
+ .register .container .register-box {
+   margin-top: 10%;
+   max-width: 596px;
+   background-color: #EAEAEA;
+   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+ }
+
+ .register-form {
+    padding: 10%;
+ }
+
+ .register .form-title {
+    color: #414042;
+    margin-bottom: 5%;
+ }
