@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: '/api/v1/',
+    apiUrl: 'https://tracking-nutrition-and-fasting-backend.onrender.com/api/v1/',
 };
