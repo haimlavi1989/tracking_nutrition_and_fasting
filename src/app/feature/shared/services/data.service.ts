@@ -14,7 +14,8 @@ import {AppErrorHandler} from "../erorrs/app-error-handler";
 
 export class DataService {
 
-  basicUrl = environment.apiUrl;
+  // basicUrl = environment.apiUrl;
+  basicUrl = "https://tracking-nutrition-and-fasting-backend.onrender.com/api/v1/"
   constructor(
     private http: HttpClient) { }
 
