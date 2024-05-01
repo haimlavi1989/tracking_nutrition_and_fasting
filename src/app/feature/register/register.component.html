@@ -5,10 +5,10 @@
         <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
         <div class="register-box col-md-6 col-lg-4 animate__animated animate__bounceInDown" *ngIf="!isLoading">
           <form [formGroup]="registerFormGroup" (ngSubmit)="onSubmit()" class="register-form">
-              <h3 class="text-center form-title">Register</h3>
+              <h3 class="text-center form-title">הרשמה</h3>
               <div class="form-group row">
                     <div class="col-md-12">
-                        <input type="text" class="form-control" name="fullname" placeholder="Full name" formControlName="fullname">
+                        <input type="text" class="form-control" name="fullname" placeholder="שם מלא" formControlName="fullname">
                     </div>
 
                     <div class="feedback col-md-12">
@@ -22,7 +22,7 @@
               </div>
               <div class="form-group row">
                   <div class="col-md-12">
-                      <input type="email" class="form-control" name="email" placeholder="Email" formControlName="email">
+                      <input type="email" class="form-control" name="email" placeholder="אימייל" formControlName="email">
                   </div>
 
                   <div class="feedback col-md-12">
@@ -39,11 +39,11 @@
                     <div class="row">
                         <div class="col-6 col-md-6 pr-1">
                             <input type="password" class="form-control" aria-describedby="passwordHelpInline"
-                            placeholder="Password" name="password" formControlName="password">
+                            placeholder="סיסמא" name="password" formControlName="password">
                         </div>
                         <div class="col-6 col-md-6 pl-1">
                         <input type="password" class="form-control" aria-describedby="confirmpasswordHelpInline"
-                        placeholder="Confirm" name="confirmpass" formControlName="confirmpass">
+                        placeholder="אימות סיסמא" name="confirmpass" formControlName="confirmpass">
                         </div>
                     </div>
 
@@ -64,7 +64,7 @@
                 <div class="form-group row">
                     <div class="col-md-12 pr-4">
                         <input type="number" class="col-6 col-md-6 form-control pr-4" name="age"
-                        placeholder="Age" min="18" max="120" formControlName="age">
+                        placeholder="Age" min="18" max="120" formControlName="גיל">
                     </div>
 
                     <div class="feedback col-md-12">
@@ -77,14 +77,14 @@
                 <div class="form-group row">
                     <div class="col-md-12">
                         <button type="submit" class="submit btn btn-primary col-md-12"
-                        [disabled]="!registerFormGroup.valid">Register</button>
+                        [disabled]="!registerFormGroup.valid">הרשמה</button>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <div class="col-md-12">
                         <button type="button" routerLink="/login" routerLinkActive="active"
-                        class="btn btn-green col-md-12">Already have an account?</button>
+                        class="btn btn-green col-md-12">כבר יש ברשותך חשבון?</button>
                     </div>
                 </div>
           </form>
