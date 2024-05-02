@@ -14,7 +14,7 @@ export class DietsService {
 
   public dietsChanged = new Subject<Diet[]>();
   private diets!: Diet[];
-  private resource: string = 'diet';
+  private resource: string = `diet/?endTime[gte]=${ new Date().toISOString()}`;
 
   constructor(
     private dataService: DataService,

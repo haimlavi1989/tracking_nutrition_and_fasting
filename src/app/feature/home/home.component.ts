@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Diet } from '../shared/models/Diet'
-import data from '../shared/data/fast.json'
 import {DataService} from "../shared/services/data.service";
-
 
 @Component({
   selector: 'app-home',
@@ -10,16 +8,25 @@ import {DataService} from "../shared/services/data.service";
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  upcoming: Diet[] = []; // Array to hold upcoming fasts
   history: Diet[] = []; // Array to hold fasting history
 
   constructor(private dataService: DataService) { }
 
+  private resource: string = `diet/?endTime[lte]=${ new Date().toISOString()}`;
+
   ngOnInit(): void {
-    this.getUpcomingFasts();
+    this.getHistory();
   }
 
-  getUpcomingFasts() {
-
-  }
+  getHistory() {
+         this.dataService.getAll(this.resource).subscribe({
+            next: (history: any) => {
+              this.history = history.data;
+              //this.calculatePagination(1);
+            },
+            error: (error) => {
+              console.error('Error fetching diets history:', error);
+            }
+        });
+    }
 }

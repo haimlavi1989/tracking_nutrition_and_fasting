@@ -4,7 +4,6 @@
   <div class="container">
     <div class="row justify-content-center align-items-center">
       <app-alert [message]="error" *ngIf="error" (close)="onHandleError()"></app-alert>
-      <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
       <div class="login-box col-md-6 col-lg-4 animate__animated animate__bounceInDown" *ngIf="!isLoading">
         <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit()" class="login-form">
             <h3 class="text-center form-title">התחברות</h3>
@@ -56,4 +55,15 @@
       </div>
     </div>
   </div>
+
+    <div class="container text-center">
+        <div class="row">
+           <app-loading-spinner [visible]="isLoading"></app-loading-spinner>
+            <div *ngIf="isLoading" class="alert alert-success" role="alert">
+               "Please note: Initial site loading may be slow due to our use of a free service
+                             that enters a sleep state when inactive,
+                             resulting in up to a 5-second delay upon waking."
+            </div>
+        </div>
+    </div>
 </div>
