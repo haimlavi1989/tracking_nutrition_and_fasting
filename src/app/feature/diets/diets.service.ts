@@ -14,7 +14,7 @@ export class DietsService {
 
   public dietsChanged = new Subject<Diet[]>();
   private diets!: Diet[];
-  private resource: string = `diet/?endTime[gte]=${ new Date().toISOString()}`;
+  private resource: string = `diet/`;
 
   constructor(
     private dataService: DataService,
@@ -35,7 +35,8 @@ export class DietsService {
       });
     } else {
       // If diets array is empty, make an HTTP request to fetch data
-      return this.dataService.getAll(this.resource).pipe(
+      const resource = this.resource + `?endTime[gte]=${ new Date().toISOString()}`;
+      return this.dataService.getAll(resource).pipe(
         tap((response: any) => {
           // Set diets
           this.diets = response.data;
