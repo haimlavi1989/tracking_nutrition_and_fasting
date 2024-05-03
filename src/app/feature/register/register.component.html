@@ -41,8 +41,8 @@
                             placeholder="סיסמא" name="password" formControlName="password">
                         </div>
                         <div class="col-6 col-md-6 pl-1">
-                        <input type="password" class="form-control" aria-describedby="confirmpasswordHelpInline"
-                        placeholder="אימות סיסמא" name="confirmpass" formControlName="confirmpass">
+                        <input type="password" class="form-control" aria-describedby="conformistsHelpInline"
+                        placeholder="אימות סיסמא" name="confirms" formControlName="confirms">
                         </div>
                     </div>
 
@@ -53,7 +53,7 @@
                             </small>
                         </div>
                         <div class="feedback col-md-6">
-                            <small *ngIf="(confirmpass.hasError('notSame') || confirmpass.hasError('minlength')) && confirmpass.dirty && confirmpass.touched">
+                            <small *ngIf="(confirms.hasError('notSame') || confirms.hasError('minlength')) && confirms.dirty && confirms.touched">
                                 No match!
                             </small>
                         </div>
@@ -63,7 +63,7 @@
                 <div class="form-group row">
                     <div class="col-md-12 pr-4">
                         <input type="number" class="col-6 col-md-6 form-control pr-4" name="age"
-                        placeholder="Age" min="18" max="120" formControlName="גיל">
+                        placeholder="גיל" min="18" max="120" formControlName="age">
                     </div>
 
                     <div class="feedback col-md-12">

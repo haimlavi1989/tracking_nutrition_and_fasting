@@ -14,7 +14,7 @@ export class RegisterComponent implements OnInit {
   public fullname = new FormControl();
   public email = new FormControl();
   public password = new FormControl();
-  public confirmpass = new FormControl();
+  public confirms = new FormControl();
   public age = new FormControl();
   public errorEmptyFields = '';
   public minlength4 = '';
@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
     this.fullname = new FormControl(null, [Validators.required, Validators.minLength(4)]);
     this.email = new FormControl(null, [Validators.required, Validators.email]);
     this.password = new FormControl(null, [Validators.required, Validators.minLength(6)]);
-    this.confirmpass = new FormControl(null, [Validators.required, Validators.minLength(6), this.checkPasswords.bind(this)]);
+    this.confirms = new FormControl(null, [Validators.required, Validators.minLength(6), this.checkPasswords.bind(this)]);
     this.age = new FormControl(null, [Validators.required, Validators.min(18), Validators.max(120)]);
   }
 
@@ -45,14 +45,14 @@ export class RegisterComponent implements OnInit {
       fullname: this.fullname,
       email: this.email,
       password: this.password,
-      confirmpass: this.confirmpass,
+      confirms: this.confirms,
       age: this.age
     });
   }
 
   checkPasswords() {
     let password = this.registerFormGroup?.get('password')?.value || '';
-    let confirmPass = this.registerFormGroup?.get('confirmpass')?.value || "";
+    let confirmPass = this.registerFormGroup?.get('confirms')?.value || "";
     return password === confirmPass ? null : { notSame: true };
   }
 
@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit {
     data.name = this.registerFormGroup.get('fullname')?.value || "";
     data.email = this.registerFormGroup.get('email')?.value || '';
     data.password = this.registerFormGroup.get('password')?.value || '';
-    data.passwordConfirm = this.registerFormGroup.get('confirmpass')?.value || '';
+    data.passwordConfirm = this.registerFormGroup.get('confirms')?.value || '';
     data.age = this.registerFormGroup.get('age')?.value || 18;
 
     this.authService.signup(data).subscribe(
