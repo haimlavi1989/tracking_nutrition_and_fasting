@@ -1,15 +1,21 @@
-<header class="header">
-    <div class="nav-header active-nav-shadow">
-        <div class="haeder-item">
-            <div class="mt-2">Created by: Haim Lavi</div>
-            <ul class="contactMe">
-              <li><a href="https://github.com/haimlavi1989/"><img src="/assets/images/git.png"></a></li>
-              <li><a href="https://mail.google.com/mail/u/0/?fs=1&to=haimlavi1989@gmail.com&su=SUBJECT&body=BODY&tf=cm"><img src="/assets/images/gmail.png"></a></li>
-              <li><a href="https://www.linkedin.com/in/haimlavi/"><img src="/assets/images/linkdin.png"></a></li>
-            </ul>
-        </div>
-        <div class="haeder-item m-auto">
-          <div class="icon-link">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+        <ul class="contactMe">
+          <li><a href="https://github.com/haimlavi1989/"><img src="/assets/images/git.png"></a></li>
+          <li><a href="https://mail.google.com/mail/u/0/?fs=1&to=haimlavi1989@gmail.com&su=SUBJECT&body=BODY&tf=cm"><img src="/assets/images/gmail.png"></a></li>
+          <li><a href="https://www.linkedin.com/in/haimlavi/"><img src="/assets/images/linkdin.png"></a></li>
+        </ul>
+    </a>
+
+    <!-- Button for small screens to toggle navigation -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible navigation menu -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
             <a class="nav-link" routerLink="/home" routerLinkActive="active">
               דף ראשי
             </a>
@@ -17,7 +23,7 @@
             <a class="nav-link" routerLink="/graphs" routerLinkActive="active">
               גרף מדדים
             </a>
-          </div>
-        </div>
+      </ul>
     </div>
-</header>
+  </div>
+</nav>
