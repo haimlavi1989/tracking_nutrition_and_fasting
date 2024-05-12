@@ -28,7 +28,6 @@ export class AuthService {
 
     login(email: string, password: string) {
         return this.dataService.create(this.resourceLogin, { email, password })
-        //return this.http.post<any>(`${this.apiUrl}users/login`, { email, password })
     }
 
     logout() {
@@ -61,10 +60,8 @@ export class AuthService {
         this.handleAuthentication();
         this.router.navigate(["/home"]);
     }
-
     // on each application startup check if user is authenticated
     handleAuthentication() {
-
       let currentUser: any = JSON.parse(<string>localStorage.getItem('currentUser'));
         if (currentUser) {
           // check token token expiration date
@@ -75,18 +72,12 @@ export class AuthService {
             // active auto logout timer
             this.setLogoutTimer(tokenTimeLift);
           }
-        } else {
-
         }
-
     }
-
     // return time left for token in miliseconds
     tokenTimeLift(currentUser: any) {
       const expirationDate = new Date(new Date(currentUser.tokenDate).getTime() + currentUser.expiresIn * 1000).getTime();
       const now = new Date().getTime();
       return (expirationDate - now);
     }
-
-
 }

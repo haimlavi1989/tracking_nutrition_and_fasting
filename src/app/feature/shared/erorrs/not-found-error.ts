@@ -2,7 +2,10 @@ import {AppErrorHandler} from "./app-error-handler";
 
 export class NotFoundError implements AppErrorHandler {
   handleError(error: any): void {
-      //alert('An error occurred.' + error);
-      console.log(error);
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Resource not found.');
+      }  
   }
 }
