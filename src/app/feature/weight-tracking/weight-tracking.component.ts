@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { WeightEntry } from './../shared/models/ WeightEntry.model';
 import {DataService} from "../shared/services/data.service";
+import { Subscription } from 'rxjs';
 
 import {
   ChartComponent,
@@ -46,6 +46,7 @@ export class WeightTrackingComponent implements OnInit {
     { key: '60 days ago', value: 60 * 24 * 60 * 60 * 1000 },
   ];
   selectedGraphTime = this.graphTimeDurations[0].value;
+  private weightTrackingSubscription: Subscription | undefined;
   private userId = '';
   series = {
      dataSeries1: {
@@ -71,7 +72,7 @@ export class WeightTrackingComponent implements OnInit {
         this.isLoadingWeightEntriesList = true;
         this.userId = this.authService.currentUserValue?.userId || '$userId';
         const addParamsToRout = `${this.resource}?duration=${this.selectedGraphTime}`;
-        this.dataService.getOne(addParamsToRout).subscribe({
+        this.weightTrackingSubscription = this.dataService.getOne(addParamsToRout).subscribe({
         next: (response: any) => {
            this.series = response.series;
            this.chartOptions = this.initialChartOptions();
@@ -133,4 +134,15 @@ export class WeightTrackingComponent implements OnInit {
       }
     };
   }
+  ngOnDestroy() {
+    if (this.weightTrackingSubscription) {
+      this.weightTrackingSubscription.unsubscribe();
+    }
+    this.series = {
+        dataSeries1: {
+          weights: [],
+          dates: []
+        }
+    };
+  }  
 }

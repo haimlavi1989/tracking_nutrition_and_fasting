@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { signupData } from "../auth/auth-data.model";
 import { AuthService } from "../auth/auth.service";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -21,6 +22,7 @@ export class RegisterComponent implements OnInit {
   public minlength6 = '';
   public error = '';
   public isLoading = false;
+  private signupSubscription: Subscription | undefined;
 
   constructor( private authService: AuthService) { }
 
@@ -65,19 +67,26 @@ export class RegisterComponent implements OnInit {
     data.passwordConfirm = this.registerFormGroup.get('confirms')?.value || '';
     data.age = this.registerFormGroup.get('age')?.value || 18;
 
-    this.authService.signup(data).subscribe(
-      response => {
-        this.authService.handleLogin(response);
-        this.isLoading = false;
-      }, errorResponse => {
-        this.isLoading = false;
-        this.error = errorResponse?.error?.message;
-      });;
+    this.signupSubscription = this.authService.signup(data).subscribe({
+        next: (response: any) => {
+          this.authService.handleLogin(response);
+          this.isLoading = false;
+        },
+        error: (errorResponse: any) => {
+          this.isLoading = false;
+          this.error = errorResponse?.error?.message;
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+    });
   }
-
   onHandleError() {
     this.error = '';
   }
-
-
+  ngOnDestroy() {
+    if (this.signupSubscription) {
+      this.signupSubscription.unsubscribe();
+    }
+  }  
 }

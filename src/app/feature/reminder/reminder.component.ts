@@ -2,6 +2,7 @@ import {Component, Input, OnChanges, SimpleChanges, Output, EventEmitter} from '
 import {DataService} from "../shared/services/data.service";
 import {Reminder} from "../shared/models/Reminder";
 import {faSave, IconDefinition} from '@fortawesome/free-solid-svg-icons'
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-reminder',
@@ -23,6 +24,7 @@ export class ReminderComponent implements OnChanges {
     { key: '1 hour', value: 1 * 60 * 60 * 1000 },
   ];
   public isLoadingReminderList = false;
+  private getOneReminderSubscription: Subscription | undefined;
 
   constructor(
       private dataService: DataService,
@@ -36,7 +38,7 @@ export class ReminderComponent implements OnChanges {
       if (reminderIdChange.currentValue !== reminderIdChange.previousValue) {
             const deleteRoute = `${this.resource}/${this.reminderId}`;
             this.isLoadingReminderList = true;
-            this.dataService.getOne(deleteRoute).subscribe({
+            this.getOneReminderSubscription = this.dataService.getOne(deleteRoute).subscribe({
                   next: (response: any) => {
                     this.reminder = response.data
                     this.isLoadingReminderList = false;
@@ -73,4 +75,9 @@ export class ReminderComponent implements OnChanges {
     handleCloseEvent() {
       this.closeComponent.emit();
     }
+    ngOnDestroy() {
+      if (this.getOneReminderSubscription) {
+        this.getOneReminderSubscription.unsubscribe();
+      }
+    }  
 }

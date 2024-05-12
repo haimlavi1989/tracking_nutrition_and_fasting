@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
 import { loginData } from "../auth/auth-data.model";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
   public errorEmptyFields = '';
   public isLoading = false;
   public error = '';
+  private loginSubscription: Subscription | undefined;
 
   constructor(
     private authService:AuthService,
@@ -43,20 +45,26 @@ export class LoginComponent implements OnInit {
     const data: loginData = {email: '', password: ''};
     data.email = this.loginFormGroup.get('email')?.value || ''
     data.password = this.loginFormGroup.get('password')?.value || ''
-    this.authService.login(data.email, data.password).subscribe(
-      (response: any) => {
-        this.authService.handleLogin(response);
-        this.isLoading = false;
-      }, (errorResponse: any) => {
-        this.isLoading = false;
-        this.error = errorResponse?.error?.message;
-      });
+    this.loginSubscription = this.authService.login(data.email, data.password).subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+          this.authService.handleLogin(response);
+        },
+        error: (errorResponse: any) => {
+          this.isLoading = false;
+          this.error = errorResponse?.error?.message;
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+    });
   }
-
   onHandleError() {
     this.error = '';
   }
-
-
-
+  ngOnDestroy() {
+    if (this.loginSubscription) {
+      this.loginSubscription.unsubscribe();
+    }
+  }  
 }

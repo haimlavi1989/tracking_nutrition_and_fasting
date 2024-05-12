@@ -19,14 +19,17 @@ export class HomeComponent {
   }
 
   getHistory() {
-         this.dataService.getAll(this.resource).subscribe({
-            next: (history: any) => {
-              this.history = history.data;
-              //this.calculatePagination(1);
-            },
-            error: (error) => {
-              console.error('Error fetching diets history:', error);
-            }
-        });
-    }
+      this.dataService.getAll(this.resource).subscribe({
+        next: (history: any) => {
+          this.history = history.data;
+          //this.calculatePagination(1);
+        },
+        error: (error) => {
+          console.error('Error fetching diets history:', error);
+        }
+    });
+  }
+  trackByFn(index: number, diet: Diet): string {
+    return diet.id;
+  }  
 }
