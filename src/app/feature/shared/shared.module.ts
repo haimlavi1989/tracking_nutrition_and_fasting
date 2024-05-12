@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { AlertComponent } from './components/alert/alert.component';

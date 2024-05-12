@@ -1,0 +1,17 @@
+<nav>
+    <ul class="pagination">
+        <li *ngIf="currentPage !== 1">
+            <a (click)="previous()" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li>
+           <span class="ml-2 mr-2">{{ currentPage }} / {{ lastPage }}</span>
+        </li>
+        <li *ngIf="currentPage !== lastPage">
+            <a (click)="next()" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
