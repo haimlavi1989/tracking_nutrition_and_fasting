@@ -1,20 +1,22 @@
 import { Injectable } from '@angular/core';
-import {Subject, Observable, map} from 'rxjs';
 import { Diet } from '../shared/models/Diet';
 import {DataService} from "../shared/services/data.service";
-import {tap} from "rxjs/operators";
+import {tap, catchError, map, } from "rxjs/operators";
+import {Subject, Observable, of} from 'rxjs';
 
-// interface Response {
-//   status: number;
-//   data: Diet;
-// }
+interface DietResponse {
+  diets: Diet[];
+  totalItems: number;
+}
+
 // this class will hold & mange Diets data CRUD
 @Injectable()
 export class DietsService {
 
   public dietsChanged = new Subject<Diet[]>();
-  private diets!: Diet[];
+  private diets: Diet[] = [];
   private resource: string = `diet/`;
+  totalItems = 0;
 
   constructor(
     private dataService: DataService,
@@ -26,25 +28,35 @@ export class DietsService {
     this.dietsChanged.next(this.diets?.slice());
   }
 
-  getDiets(): Observable<Diet[]> {
-    if (this.diets) {
-      // If diets array already contains data, return it as an observable
-      return new Observable<any[]>(observer => {
-        observer.next(this.diets.slice());
-        observer.complete();
-      });
-    } else {
-      // If diets array is empty, make an HTTP request to fetch data
-      const resource = this.resource + `?endTime[gte]=${ new Date().toISOString()}`;
-      return this.dataService.getAll(resource).pipe(
-        tap((response: any) => {
-          // Set diets
-          this.diets = response.data;
-        }),
-        // Return a copy of the fetched data
-        map(() => this.diets?.slice())
-      );
-    }
+  getDiets(page=1, limit=2): Observable< DietResponse> {
+        // Check if diets are already cached
+        if (this.diets.length > 0) {
+          const startIndex = (page - 1) * limit;
+          const endIndex = startIndex + limit;
+          const paginatedDiets = this.diets.slice(startIndex, endIndex);
+          if (paginatedDiets.length > 0) {
+            return of({ diets: paginatedDiets, totalItems: this.totalItems }); // Return cached data
+          }
+        }
+        // Fetch data from the server if no data available or client requested different page
+        const resource = this.resource + `?endTime[gte]=${ new Date().toISOString()}` + `&page=${page}&limit=${limit}`;
+        return this.dataService.getAll(resource).pipe(
+          tap((response: any) => {
+            // Update cache with fetched data
+            this.diets = [...this.diets, ...response.data];
+            this.totalItems = response.fullResoults
+          }),
+          map(() => {
+            const startIndex = (page - 1) * limit;
+            const endIndex = startIndex + limit;
+            const paginatedDiets = this.diets.slice(startIndex, endIndex);
+            return { diets: paginatedDiets, totalItems: this.totalItems } // Return paginated data
+          }),
+          catchError((error) => {
+            console.error(error);
+            return of({ diets: [], totalItems: 0 });
+          })
+        );
   }
 
   getDiet(id: string) {
@@ -88,7 +100,9 @@ export class DietsService {
 
   private deleteLocalDiet(dietID: string) {
     const dietIndex = this.diets.findIndex(diet => diet.id === dietID);
-    this.diets?.splice(dietIndex, 1);
-    this.dietsChanged.next(this.diets?.slice());
+    if (dietIndex !== -1) {
+      this.diets?.splice(dietIndex, 1);
+      this.dietsChanged.next(this.diets?.slice());
+    }
   }
 }

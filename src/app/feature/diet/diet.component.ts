@@ -1,14 +1,15 @@
-import {Component, Input, AfterViewInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, AfterViewInit, OnChanges, SimpleChanges, OnDestroy} from '@angular/core';
 import { Diet } from '../shared/models/Diet'
 import {faTrash, faPencil, faSave, faBell, faPlus, IconDefinition} from '@fortawesome/free-solid-svg-icons'
 import {DietsService} from "../diets/diets.service";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-diet',
   templateUrl: './diet.component.html',
   styleUrl: './diet.component.scss'
 })
-export class DietComponent implements OnChanges {
+export class DietComponent implements OnChanges,OnDestroy {
    @Input('diet') diet: Diet = new Diet();
    // Font awesome
    faTrash: IconDefinition;
@@ -27,6 +28,10 @@ export class DietComponent implements OnChanges {
    groups: string[][] = [];
    newFoodItem: string = 'מאכל חדש';
    isEditFoodList = false;
+   private deleteDietSubscription:  Subscription | undefined;
+   private updateDietSubscription: Subscription | undefined;
+   private updateSpecificDietSubscription: Subscription | undefined;
+   errorMessage = ''
 
    constructor(
       private dietsService: DietsService,
@@ -51,7 +56,7 @@ export class DietComponent implements OnChanges {
     handleDeleteSelection(selection: boolean) {
        if (selection) {
              this.isLoadingDiet = true;
-             this.dietsService.deleteDiet(this.diet.id).subscribe({
+             this.deleteDietSubscription = this.dietsService.deleteDiet(this.diet.id).subscribe({
                   next: () => {
                     console.log(`Diet was deleted`);
                   },
@@ -87,7 +92,7 @@ export class DietComponent implements OnChanges {
                 alert('Selected time is to old please update your selection')
         } else {
           this.isLoadingDiet = true;
-          this.dietsService.updateDiet(this.diet.id, this.diet).subscribe({
+          this.updateSpecificDietSubscription = this.dietsService.updateDiet(this.diet.id, this.diet).subscribe({
                 next: () => {
                   this.isEditDiet = !this.isEditDiet;
                   console.log(`Updating was Done`);
@@ -151,7 +156,7 @@ export class DietComponent implements OnChanges {
     handleUpdatingFoodList() {
           this.diet.foodList = this.flattenGroups();
           this.isLoadingDiet = true;
-          this.dietsService.updateDiet(this.diet.id, this.diet).subscribe({
+          this.updateDietSubscription = this.dietsService.updateDiet(this.diet.id, this.diet).subscribe({
                 next: () => {
                   this.isEditFoodList = !this.isEditFoodList;
                   this.isLoadingDiet = false;
@@ -165,4 +170,18 @@ export class DietComponent implements OnChanges {
                 }
           });
     }
+    handleError() {
+
+    }
+    ngOnDestroy() {
+      if (this.deleteDietSubscription) {
+        this.deleteDietSubscription.unsubscribe();
+      }
+      if (this.updateSpecificDietSubscription) {
+        this.updateSpecificDietSubscription.unsubscribe();
+      }
+      if (this.updateDietSubscription) {
+        this.updateDietSubscription.unsubscribe();
+      }
+    }  
 }
