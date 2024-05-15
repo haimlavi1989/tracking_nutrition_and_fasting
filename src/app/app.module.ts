@@ -19,8 +19,8 @@ import { DietComponent } from './feature/diet/diet.component';
 import {DietsService} from "./feature/diets/diets.service";
 import { DatePipe } from '@angular/common';
 import { ReminderComponent } from './feature/reminder/reminder.component';
-import { WeightTrackingComponent } from './feature/weight-tracking/weight-tracking.component';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { WeightTrackingModule } from './feature/weight-tracking/weight-tracking.module';
+
 
 @NgModule({
   declarations: [
@@ -32,15 +32,14 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     DietsComponent,
     DietComponent,
     ReminderComponent,
-    WeightTrackingComponent,
   ],
   imports: [
+    WeightTrackingModule,
     BrowserModule,
     AppRoutingModule,
     CommonModule,
     HttpClientModule,
     SharedModule,
-    NgApexchartsModule
   ],
   providers: [
     DatePipe,

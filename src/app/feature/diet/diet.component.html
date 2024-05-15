@@ -13,7 +13,9 @@
           <div *ngIf="isEditDiet">
               <div class="text-center p-1">
                   <span class="text-bg-danger">{{'התחלה'}}</span><br><br>
-                  <input type="datetime-local" id="datetimepicker" (change)="handleDateSelected($event)" [value]="dietOBJCopy.startTime | date: 'yyyy-MM-ddTHH:mm'">
+                  <form [formGroup]="dietForm">
+                    <input type="datetime-local" formControlName="startTime" id="datetimepicker" (change)="handleDateSelected()" [value]="dietOBJCopy.startTime | date: 'yyyy-MM-ddTHH:mm'">
+                  </form>
               </div>
               <div class="text-center p-1">
                   <span class="text-bg-success">{{'סיום'}}</span>

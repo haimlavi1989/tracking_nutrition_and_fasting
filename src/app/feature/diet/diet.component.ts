@@ -3,6 +3,7 @@ import { Diet } from '../shared/models/Diet'
 import {faTrash, faPencil, faSave, faBell, faPlus, IconDefinition} from '@fortawesome/free-solid-svg-icons'
 import {DietsService} from "../diets/diets.service";
 import { Subscription } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-diet',
@@ -32,17 +33,24 @@ export class DietComponent implements OnChanges,OnDestroy {
    private updateDietSubscription: Subscription | undefined;
    private updateSpecificDietSubscription: Subscription | undefined;
    errorMessage = ''
+   dietForm!: FormGroup;
 
    constructor(
       private dietsService: DietsService,
+      private formBuilder: FormBuilder
     ) {
       this.faTrash = faTrash;
       this.faPencil = faPencil;
       this.faSave = faSave;
       this.faBell = faBell;
       this.faPlus = faPlus;
+      this.initForm();
     }
-
+    initForm(): void {
+      this.dietForm = this.formBuilder.group({
+        startTime: [''] // Add any validators if necessary
+      });
+    }
     ngOnChanges(changes: SimpleChanges) {
         if ('diet' in changes) {
             this.groups = this.getGroups();
@@ -75,13 +83,13 @@ export class DietComponent implements OnChanges,OnDestroy {
         this.isEditDiet = !this.isEditDiet;
         this.dietOBJCopy = structuredClone(this.diet);
     }
-    handleDateSelected(event: Event) {
-        const dateString = (event.target as HTMLInputElement).value;
+    handleDateSelected() {
+      const startTimeControl = this.dietForm.get('startTime');
+      if (startTimeControl) {
+        const dateString = startTimeControl.value;
         this.dietOBJCopy.startTime = new Date(dateString);
-        this.dietOBJCopy.endTime = this.add24HoursFromStartTime();
-    }
-    add24HoursFromStartTime() {
-      return new Date(this.dietOBJCopy.startTime.getTime() + this.time_24_hours);
+        this.dietOBJCopy.endTime = new Date(this.dietOBJCopy.startTime.getTime() + this.time_24_hours); // Add 24 hours
+      }
     }
     setAlert() {
     this.isShowingReminderComponent = true;
@@ -92,6 +100,10 @@ export class DietComponent implements OnChanges,OnDestroy {
                 alert('Selected time is to old please update your selection')
         } else {
           this.isLoadingDiet = true;
+          if (this.dietOBJCopy.startTime && this.dietOBJCopy.endTime) {
+            this.diet.startTime = this.dietOBJCopy.startTime;
+            this.diet.endTime = this.dietOBJCopy.endTime;
+          }
           this.updateSpecificDietSubscription = this.dietsService.updateDiet(this.diet.id, this.diet).subscribe({
                 next: () => {
                   this.isEditDiet = !this.isEditDiet;

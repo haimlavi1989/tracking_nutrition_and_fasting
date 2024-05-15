@@ -4,15 +4,18 @@ import { LoginComponent } from './feature/login/login.component';
 import { RegisterComponent } from './feature/register/register.component';
 import { AuthGuard } from "./feature/auth/auth.guard";
 import {HomeComponent} from "./feature/home/home.component";
-import {WeightTrackingComponent} from "./feature/weight-tracking/weight-tracking.component"
-
 
  const routes: Routes = [
     { path : 'login', component : LoginComponent },
     { path : 'register', component : RegisterComponent },
     { path : 'home', component : HomeComponent, canActivate: [AuthGuard]},
-    { path : 'graphs', component : WeightTrackingComponent, canActivate: [AuthGuard]},
+    //  Graphs was set as "lazy loading" Assuming that this is not a key component of the system.
+    {
+      path: 'graphs',
+      loadChildren: () => import('./feature/weight-tracking/weight-tracking.module').then(m => m.WeightTrackingModule)
+    },
     { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: '**', redirectTo: 'home' }
   ];
 
 @NgModule({

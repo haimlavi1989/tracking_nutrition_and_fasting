@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Diet } from '../shared/models/Diet';
 import {DataService} from "../shared/services/data.service";
 import {tap, catchError, map, } from "rxjs/operators";
-import {Subject, Observable, of} from 'rxjs';
+import {Subject, Observable, of, throwError} from 'rxjs';
 
 interface DietResponse {
   diets: Diet[];
@@ -69,10 +69,14 @@ export class DietsService {
 
   createDiet(dietResource: Diet): Observable<Diet> {
       return this.dataService.create(this.resource, dietResource).pipe(
-        tap((response: any) => {
-            const dietObj: Diet = response.data.diet;
-            this.diets.unshift(dietObj);
-            this.dietsChanged.next(this.diets?.slice());
+        map((response: any) => response.data.diet),
+        catchError((error: any) => {
+          console.error('Error creating diet:', error);
+          return throwError(() => new Error(error));
+        }),
+        tap((dietObj: any) => {
+            this.diets = [dietObj, ...this.diets];
+            this.dietsChanged.next([...this.diets]);
         }),
       );
   }
@@ -80,10 +84,14 @@ export class DietsService {
   updateDiet(id: string, newDiet: Diet) {
     const dietIndex = this.diets.findIndex(diet => diet.id === id);
      return this.dataService.update(this.resource, newDiet).pipe(
+          catchError((error: any) => {
+            console.error('Error update diet:', error);
+            return throwError(() => new Error(error));
+          }),
           tap((response: any) => {
               if (response.status && response.status === 200) {
                 this.diets[dietIndex] = newDiet;
-                this.dietsChanged.next(this.diets?.slice());
+                this.dietsChanged.next([...this.diets]);
               }
           }),
      );
@@ -91,6 +99,10 @@ export class DietsService {
 
   deleteDiet(dietID: string): Observable<any> {
     return this.dataService.delete(this.resource, dietID).pipe(
+      catchError((error: any) => {
+        console.error('Error delete diet:', error);
+        return throwError(() => new Error(error));
+      }),
       tap(() => {
         // If successful, also delete the record from the local
         this.deleteLocalDiet(dietID);
@@ -101,8 +113,12 @@ export class DietsService {
   private deleteLocalDiet(dietID: string) {
     const dietIndex = this.diets.findIndex(diet => diet.id === dietID);
     if (dietIndex !== -1) {
-      this.diets?.splice(dietIndex, 1);
-      this.dietsChanged.next(this.diets?.slice());
+        const updatedDiets = this.diets.filter(diet => diet.id !== dietID); // Using filter for immutability
+        this.diets = updatedDiets;
+        this.dietsChanged.next([...this.diets]);
+    } else {
+        console.error(`Diet with ID ${dietID} not found.`);
     }
-  }
+}
+
 }

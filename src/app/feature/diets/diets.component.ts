@@ -111,10 +111,6 @@ export class DietsComponent {
       alert("Selected start time has passed:" + this.selectedDate);
     }
   }
-  // calculatePagination(page = 1, pagesSum = 1) {
-  //     this.currentPage = page;
-  //     this.numberOfPages = Math.ceil(this.diets.length / this.currentResultPerPage);
-  // }
   ngOnDestroy() {
     if (this.getDietsSubscription) {
       this.getDietsSubscription.unsubscribe();

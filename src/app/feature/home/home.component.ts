@@ -15,19 +15,20 @@ export class HomeComponent {
   private resource: string = `diet/?endTime[lte]=${ new Date().toISOString()}`;
 
   ngOnInit(): void {
-    this.getHistory();
+    //this.getHistory();
   }
 
   getHistory() {
-      this.dataService.getAll(this.resource).subscribe({
-        next: (history: any) => {
-          this.history = history.data;
-          //this.calculatePagination(1);
-        },
-        error: (error) => {
-          console.error('Error fetching diets history:', error);
-        }
-    });
+     // move this code to a service
+    //   this.dataService.getAll(this.resource).subscribe({
+    //       next: (history: any) => {
+    //         this.history = history.data;
+    //         //this.calculatePagination(1);
+    //       },
+    //       error: (error) => {
+    //         console.error('Error fetching diets history:', error);
+    //       }
+    //  });
   }
   trackByFn(index: number, diet: Diet): string {
     return diet.id;

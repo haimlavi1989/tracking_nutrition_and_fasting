@@ -1,32 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {DataService} from "../shared/services/data.service";
 import { Subscription } from 'rxjs';
-
-import {
-  ChartComponent,
-  ApexAxisChartSeries,
-  ApexChart,
-  ApexXAxis,
-  ApexDataLabels,
-  ApexStroke,
-  ApexYAxis,
-  ApexTitleSubtitle,
-  ApexLegend
-} from "ng-apexcharts";
 import {AuthService} from "../auth/auth.service";
-
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  xaxis: ApexXAxis;
-  stroke: ApexStroke;
-  dataLabels: ApexDataLabels;
-  yaxis: ApexYAxis;
-  title: ApexTitleSubtitle;
-  labels: string[];
-  legend: ApexLegend;
-  subtitle: ApexTitleSubtitle;
-};
+import { ChartOptions } from '../shared/models/chart-options.model';
+import { ChartComponent } from "ng-apexcharts";
+import { ChartService } from './chart.service';
+import { WeightDataService } from './weight-data.service';
 
 @Component({
   selector: 'app-weight-tracking',
@@ -48,101 +27,38 @@ export class WeightTrackingComponent implements OnInit {
   selectedGraphTime = this.graphTimeDurations[0].value;
   private weightTrackingSubscription: Subscription | undefined;
   private userId = '';
-  series = {
-     dataSeries1: {
-        weights: [],
-        dates: []
-     }
-  };
 
   constructor(
     private authService: AuthService,
-    private dataService: DataService) {
+    private chartService: ChartService,
+    private weightDataService: WeightDataService) {
   }
 
   ngOnInit(): void {
     this.userId = this.authService.currentUserValue?.userId || '$userId';
-    this.resource = `diet/user/${this.userId}/weights`;
-    if (!this.chartOptions) {
-      this.getGraphData();
-    }
+    this.getGraphData();
   }
 
   getGraphData() {
         this.isLoadingWeightEntriesList = true;
-        this.userId = this.authService.currentUserValue?.userId || '$userId';
-        const addParamsToRout = `${this.resource}?duration=${this.selectedGraphTime}`;
-        this.weightTrackingSubscription = this.dataService.getOne(addParamsToRout).subscribe({
-        next: (response: any) => {
-           this.series = response.series;
-           this.chartOptions = this.initialChartOptions();
-           this.isLoadingWeightEntriesList = false;
-        },
-        error: (error) => {
-            this.isLoadingWeightEntriesList = false;
-        },
-        complete: () => {
-            this.isLoadingWeightEntriesList = false;
-        }
-      });
+        const resource = `diet/user/${this.userId}/weights`;
+        const queryParam = { name: 'duration', value: this.selectedGraphTime };
+        this.weightTrackingSubscription = this.weightDataService.getWeightData(resource, queryParam)
+          .subscribe({
+            next: (response: any) => {
+              this.chartOptions = this.chartService.getChartOptions(response.series.dataSeries1);
+              this.isLoadingWeightEntriesList = false;
+            },
+            error: (error) => {
+              console.error('Error fetching weight data:', error);
+              this.isLoadingWeightEntriesList = false;
+            }
+        });
   }
 
-  initialChartOptions(): Partial<ChartOptions> {
-    return {
-      series: [
-        {
-          name: "Weight (kg)",
-          data: this.series.dataSeries1.weights
-        }
-      ],
-      chart: {
-        type: "line",
-        height: 350,
-        zoom: {
-          enabled: false
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: "straight"
-      },
-      title: {
-        text: "מעקב משקלים / ציר זמן",
-        align: "center"
-      },
-      subtitle: {
-        text: "",
-        align: "center"
-      },
-      labels: this.series.dataSeries1.dates,
-      xaxis: {
-        type: "datetime",
-        labels: {
-          format: 'dd MMM yyyy'
-        }
-      },
-      yaxis: {
-        title: {
-          text: 'Weight (kg)'
-        },
-        opposite: true
-      },
-      legend: {
-        horizontalAlign: "left"
-      }
-    };
-  }
   ngOnDestroy() {
     if (this.weightTrackingSubscription) {
       this.weightTrackingSubscription.unsubscribe();
     }
-    this.series = {
-        dataSeries1: {
-          weights: [],
-          dates: []
-        }
-    };
   }  
 }

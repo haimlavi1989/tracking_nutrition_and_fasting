@@ -1,20 +1,19 @@
-import {Component, Input, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
-import {DataService} from "../shared/services/data.service";
-import {Reminder} from "../shared/models/Reminder";
-import {faSave, IconDefinition} from '@fortawesome/free-solid-svg-icons'
+import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { ReminderService } from './reminder.service';
+import { Reminder } from '../shared/models/Reminder';
+import { faSave, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-reminder',
   templateUrl: './reminder.component.html',
-  styleUrl: './reminder.component.scss'
+  styleUrls: ['./reminder.component.scss'] // Corrected from styleUrl to styleUrls
 })
-export class ReminderComponent implements OnChanges {
+export class ReminderComponent implements OnChanges, OnDestroy {
   @Input('reminderId') reminderId = '';
   @Output() closeComponent = new EventEmitter<void>();
 
-  private resource = 'reminder';
-  public reminder = new Reminder()
+  public reminder = new Reminder();
   public faSave: IconDefinition;
   public reminderTimeOptionsArray = [
     { key: '5 minutes', value: 1 * 5 * 60 * 1000 },
@@ -26,58 +25,52 @@ export class ReminderComponent implements OnChanges {
   public isLoadingReminderList = false;
   private getOneReminderSubscription: Subscription | undefined;
 
-  constructor(
-      private dataService: DataService,
-  ) {
-      this.faSave = faSave;
+  constructor(private reminderService: ReminderService) {
+    this.faSave = faSave;
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if ('reminderId' in changes) {
       const reminderIdChange = changes['reminderId'];
       if (reminderIdChange.currentValue !== reminderIdChange.previousValue) {
-            const deleteRoute = `${this.resource}/${this.reminderId}`;
-            this.isLoadingReminderList = true;
-            this.getOneReminderSubscription = this.dataService.getOne(deleteRoute).subscribe({
-                  next: (response: any) => {
-                    this.reminder = response.data
-                    this.isLoadingReminderList = false;
-                  },
-                  error: (error) => {
-                    this.isLoadingReminderList = false;
-                  },
-                  complete: () => {
-                    this.isLoadingReminderList = false;
-                  }
-            });
+        this.loadReminder(this.reminderId);
       }
     }
   }
-  saveRemindersChanges() {
-        this.isLoadingReminderList = true;
-        const reminderData = new Reminder();
-        reminderData.id = this.reminder.id
-        reminderData.timeToAlertBeforeNutritionStart = this.reminder.timeToAlertBeforeNutritionStart;
-        reminderData.timeToAlertBeforeFastingStart = this.reminder.timeToAlertBeforeFastingStart;
 
-        this.dataService.update(this.resource, reminderData).subscribe({
-              next: (response: any) => {
-                this.isLoadingReminderList = false;
-              },
-              error: (error) => {
-                this.isLoadingReminderList = false;
-              },
-              complete: () => {
-                this.isLoadingReminderList = false;
-              }
-        });
-    }
-    handleCloseEvent() {
-      this.closeComponent.emit();
-    }
-    ngOnDestroy() {
-      if (this.getOneReminderSubscription) {
-        this.getOneReminderSubscription.unsubscribe();
+  loadReminder(reminderId: string) {
+    this.isLoadingReminderList = true;
+    this.getOneReminderSubscription = this.reminderService.getReminder(reminderId).subscribe({
+      next: (response: any) => {
+        console.log('response', response)
+        this.reminder = response;
+        this.isLoadingReminderList = false;
+      },
+      error: () => {
+        this.isLoadingReminderList = false;
       }
-    }  
+    });
+  }
+
+  saveRemindersChanges() {
+    this.isLoadingReminderList = true;
+    this.reminderService.updateReminder(this.reminder).subscribe({
+      next: () => {
+        this.isLoadingReminderList = false;
+      },
+      error: () => {
+        this.isLoadingReminderList = false;
+      }
+    });
+  }
+
+  handleCloseEvent() {
+    this.closeComponent.emit();
+  }
+
+  ngOnDestroy() {
+    if (this.getOneReminderSubscription) {
+      this.getOneReminderSubscription.unsubscribe();
+    }
+  }
 }
