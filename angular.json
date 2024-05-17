@@ -24,7 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/tracking_nutrition_and_fasting/browser",
+            "outputPath": "dist/tracking_nutrition_and_fasting",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -45,7 +45,7 @@
           },
           "configurations": {
             "production": {
-              "outputPath": "dist/tracking_nutrition_and_fasting/browser",
+              "outputPath": "dist/tracking_nutrition_and_fasting",
               "budgets": [
                 {
                   "type": "initial",

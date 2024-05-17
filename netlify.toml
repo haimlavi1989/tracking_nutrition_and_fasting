@@ -1,0 +1,3 @@
+[build]
+  command = "ng build --configuration production"
+  publish = "dist/tracking_nutrition_and_fasting/browser"
