@@ -4,15 +4,15 @@ import { catchError, retry } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { BadInput } from './../erorrs/bad-input';
 import { NotFoundError } from './../erorrs/not-found-error';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.development';
 import {AppErrorHandler} from "../erorrs/app-error-handler";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  private basicUrl: string = "https://tracking-nutrition-and-fasting-backend.onrender.com/api/v1/";
-  //private basicUrl: string = environment.apiUrl;
+  //private basicUrl: string = "https://tracking-nutrition-and-fasting-backend.onrender.com/api/v1/";
+  private basicUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
