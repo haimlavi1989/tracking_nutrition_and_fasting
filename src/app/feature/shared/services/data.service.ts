@@ -4,7 +4,7 @@ import { catchError, retry } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { BadInput } from './../erorrs/bad-input';
 import { NotFoundError } from './../erorrs/not-found-error';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import {AppErrorHandler} from "../erorrs/app-error-handler";
 
 @Injectable({
