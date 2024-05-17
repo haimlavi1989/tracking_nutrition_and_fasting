@@ -45,6 +45,7 @@
           },
           "configurations": {
             "production": {
+              "outputPath": "dist/tracking_nutrition_and_fasting/browser",
               "budgets": [
                 {
                   "type": "initial",
